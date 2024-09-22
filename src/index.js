@@ -2,7 +2,7 @@ const express=require('express');
 const path=require('path')
 const app=express();
 const env=require('dotenv').config();
-
+const fs =require('fs')
 port=process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
@@ -19,18 +19,64 @@ app.use((req,res,next)=>{
 
 })
 
-app.get("/",(req,res)=>{
-      const MArks = 24;
-     res.render("index",{MArks})
+app.get("/",async(req,res)=>{
+
+
+     fs.readdir('./files', (err, files) => {
+
+          if (err) {
+              return res.status(500).send('Error reading directory');
+          }
+
+          res.render('index', {files:files});
+  
+             })
+
+
     
 })
 
-app.get('/profile/:username',(req,res)=>{
 
-       const value=req.params.username;
+app.post('/create',(req,res)=>{
+
       
+      fs.writeFile(`./files/${req.body.title.split(' ').join('')}.txt`,JSON.stringify(req.body),(err)=>{
+          if(err){
+               res.send("Error while doing it abhi nahi hogga ")
+          }
 
-      res.send(`<h2> My name is ${value} </h2>`)
+          res.redirect('/');
+
+
+      });
+
+
+
+
+   
+
+    
+
+    
+
+
+})
+
+app.get('/files/:filename',(req,res)=>{
+
+
+        fs.readFile(`./files/${req.params.filename}`,'utf-8',(err,body)=>{
+
+            res.render("files",{bodydata:JSON.parse(body)});
+
+           
+           
+         
+
+
+        })
+        
+  
 })
 
 
