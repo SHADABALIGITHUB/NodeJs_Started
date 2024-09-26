@@ -65,7 +65,7 @@
                   const heading = formatHeading(filename);
                   %>
                       
-                       <h2 class="tittle text-2xl"><span class="font-bold"> </span> <%= heading %> </h2>
+                       <h2 class="tittle text-2xl "><span class="font-bold"> </span> <%= heading.slice(0,8).split(' ').join('')+'..' %> </h2>
                        <a class="p-2 whitespace-break-spaces text-blue-400 cursor-pointer inline-block " href="/files/<%= val %>"> Read more..  </a>
                         
 
