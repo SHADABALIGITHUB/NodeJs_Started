@@ -3,9 +3,18 @@ const path=require('path')
 const app=express();
 const env=require('dotenv').config();
 const fs =require('fs')
+const cors=require('cors');
+
 port=process.env.PORT || 3000;
+
+app.use(cors('*'))
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
+const home_Routes=require('../routes/home.routes');
+const create_Routes=require('../routes/create.routes');
+const textfile_Route=require('../routes/textfile.routes');
+const EditTitle_Route=require('../routes/edittitle.routes')
+const realFileEdit_Route=require('../routes/realedit.routes')
 
 app.use(express.static(path.join(__dirname,'..','Client')));
 
@@ -19,65 +28,21 @@ app.use((req,res,next)=>{
 
 })
 
-app.get("/",async(req,res)=>{
+
+app.use("/",home_Routes);
+app.use("/",create_Routes);
+app.use('/',textfile_Route);
+app.use('/',EditTitle_Route);
+app.use('/',realFileEdit_Route);
 
 
-     fs.readdir('./files', (err, files) => {
-
-          if (err) {
-              return res.status(500).send('Error reading directory');
-          }
-
-          res.render('index', {files:files});
-  
-             })
+// app.get('/files/:filename',(req,res)=>{
 
 
-    
-})
-
-
-app.post('/create',(req,res)=>{
-
-      
-      fs.writeFile(`./files/${req.body.title.split(' ').join('')}.txt`,JSON.stringify(req.body),(err)=>{
-          if(err){
-               res.send("Error while doing it abhi nahi hogga ")
-          }
-
-          res.redirect('/');
-
-
-      });
-
-
-
-
-   
-
-    
-
-    
-
-
-})
-
-app.get('/files/:filename',(req,res)=>{
-
-
-        fs.readFile(`./files/${req.params.filename}`,'utf-8',(err,body)=>{
-
-            res.render("files",{bodydata:JSON.parse(body)});
-
-           
-           
-         
-
-
-        })
+        
         
   
-})
+// })
 
 
 
