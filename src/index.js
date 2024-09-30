@@ -4,6 +4,7 @@ const app=express();
 const env=require('dotenv').config();
 const fs =require('fs')
 const cors=require('cors');
+const expressLayoutEjs=require('express-ejs-layouts');
 
 port=process.env.PORT || 3000;
 
@@ -18,10 +19,13 @@ const realFileEdit_Route=require('../routes/realedit.routes')
 
 
 
+
 const userModel=require('../database/user.models')
 
 app.use(express.static(path.join(__dirname,'..','Client')));
+app.use(expressLayoutEjs);
 
+app.set('views', path.join(__dirname,'..','views')); 
 
 app.set('view engine','ejs');
 
@@ -35,58 +39,44 @@ app.use((req,res,next)=>{
 
 app.post('/createuser',async(req,res)=>{
 
-    const created= await userModel.create({
-          name:"Shadab",
-          email:"shadabali78@gmail.com",
-          username:"Shaddycoder",
-       })
+       try{
 
-       res.send();
+              if(req.body.email==''){
+                     res.status(409).send({message:'email already exist',success:false});
+              }
+
+      const created= await userModel.create({
+          name:req.body.name,
+          email:req.body.email,
+          username:req.body.username,
+       }) 
+       res.status(200).send({data:created,message:'sucessfully ',success:false});
+} catch(err){
+        
+         
+         res.redirect('/');
+
+ }
+
+       
       
 })
-app.get('/',async(req,res)=>{
+app.get('/login',async(req,res)=>{
 
       
 
-     
-     res.render()
-     const created= await userModel.create({
-           name:"Shadab",
-           email:"shadabali78@gmail.com",
-           username:"Shaddycoder",
-        })
+     res.render('userindex');
  
-        res.send(created);
        
  })
 
-// app.get('/',async(req,res)=>{
-//      const created= await userModel.create({
-//            name:"Shadab",
-//            email:"shadabali78@gmail.com",
-//            username:"Shaddycoder",
-//         })
- 
-//         res.send(created);
-       
-//  })
 
 
-// app.use("/",home_Routes);
-// app.use("/",create_Routes);
-// app.use('/',textfile_Route);
-// app.use('/',EditTitle_Route);
-// app.use('/',realFileEdit_Route);
-
-
-// app.get('/files/:filename',(req,res)=>{
-
-
-        
-        
-  
-// })
-
+app.use("/",home_Routes);
+app.use("/",create_Routes);
+app.use('/',textfile_Route);
+app.use('/',EditTitle_Route);
+app.use('/',realFileEdit_Route);
 
 
 
