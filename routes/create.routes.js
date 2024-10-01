@@ -5,7 +5,7 @@ const router=express.Router();
 const {create}=require('../controllers/create');
 
 
-router.route('/create').post(create);
+router.route('/').post(create);
 
 
 module.exports=router;

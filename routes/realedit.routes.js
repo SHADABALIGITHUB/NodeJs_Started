@@ -4,7 +4,7 @@ const router=express.Router();
 const {realedittiltleController}=require('../controllers/realedit')
 
 
-router.route('/realfilesedit').post(realedittiltleController);
+router.route('/').post(realedittiltleController);
 
 
 

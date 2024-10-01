@@ -15,8 +15,9 @@ const home_Routes=require('../routes/home.routes');
 const create_Routes=require('../routes/create.routes');
 const textfile_Route=require('../routes/textfile.routes');
 const EditTitle_Route=require('../routes/edittitle.routes')
-const realFileEdit_Route=require('../routes/realedit.routes')
-
+const realFileEdit_Route=require('../routes/realedit.routes');
+const Register_Route=require('../routes/register.routes');
+const Login_Routes=require('../routes/login.routes');
 
 
 
@@ -37,46 +38,35 @@ app.use((req,res,next)=>{
 })
 
 
-app.post('/createuser',async(req,res)=>{
 
-       try{
-
-              if(req.body.email==''){
-                     res.status(409).send({message:'email already exist',success:false});
-              }
-
-      const created= await userModel.create({
-          name:req.body.name,
-          email:req.body.email,
-          username:req.body.username,
-       }) 
-       res.status(200).send({data:created,message:'sucessfully ',success:false});
-} catch(err){
-        
-         
-         res.redirect('/');
-
- }
-
-       
-      
-})
-app.get('/login',async(req,res)=>{
+app.get('/register',async(req,res)=>{
 
       
 
-     res.render('userindex');
+     res.render('userRegister');
  
        
  })
+ app.get('/login',async(req,res)=>{
+
+      
+
+       res.render('userLogin');
+   
+         
+   })
+
+ 
 
 
 
 app.use("/",home_Routes);
-app.use("/",create_Routes);
-app.use('/',textfile_Route);
-app.use('/',EditTitle_Route);
-app.use('/',realFileEdit_Route);
+app.use("/create",create_Routes);
+app.use('/files/',textfile_Route);
+app.use('/filesedit',EditTitle_Route);
+app.use('/realfilesedit',realFileEdit_Route);
+app.use('/createuser',Register_Route);
+app.use('/loginuser',Login_Routes);
 
 
 
